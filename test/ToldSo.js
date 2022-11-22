@@ -23,10 +23,13 @@ describe('ToldSo', function () {
 			const { toldSo } = await loadFixture(deployFixture)
 			const title = 'Hello World'
 			const body = 'This is my first post'
+			const [owner, alice, bob] = await ethers.getSigners()
 
-			await toldSo.createPost(title, body)
-			const posts = await toldSo.getPostsByAuthor()
-			expect(posts[0]).to.equal(post)
+			await toldSo.connect(alice).createPost(title, body)
+			const posts = await toldSo.getPostsByAuthor(alice.address)
+
+			expect(posts[0].body).to.equal(body)
+			expect(posts[0].title).to.equal(title)
 		})
 	})
 
